@@ -83,6 +83,12 @@ class ProdutoController{
   }).then(r => res.status(200).json(r))
       .catch(e => res.status(400).json({error: 'ID não correspondido.'}))
  }
+
+  async destroy(req, res){
+    await Produto.deleteOne({'_id': req.params._id})
+      .then(() => res.status(200).json({msg:'Deletado com sucesso.'}))
+        .catch(() => res.status(400).json({error: 'Não foi encontrado o produto informado'}))
+  }
 }
 
 module.exports = new ProdutoController()

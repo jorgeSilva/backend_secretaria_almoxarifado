@@ -1,4 +1,5 @@
 const Produto = require('../model/Produto')
+const Secretaria = require('../model/Secretaria')
 const TempLict = require('../model/TempLicitacao')
 const Yup = require('yup')
 
@@ -7,10 +8,11 @@ class ProdutoController{
     const schema = Yup.object().shape({
       nome: Yup.string().required(),
       quantidadeProduto: Yup.number().required(),
-      unidadeMedida: Yup.string().required()
+      unidadeMedida: Yup.string().required(),
+      secretaria: Yup.string().required()
     })
 
-    const { nome, quantidadeProduto, unidadeMedida } = req.body
+    const { nome, quantidadeProduto, unidadeMedida, secretaria} = req.body
 
     if(!(await schema.isValid(req.body))){
       return res.status(400).json({error: 'Algum campo está inválido.'})
@@ -21,14 +23,20 @@ class ProdutoController{
     if(produtoExist != false){
       return res.status(400).json({error: 'Produto já existente na licitação.'})
     }
-      const create = await Produto.create({
+
+    await Secretaria.find(
+      {
+        _id: {'$eq': secretaria}
+      }
+    ).then( r => 
+      Produto.create({
         nome,
         quantidadeProduto,
-        unidadeMedida
-      })
-
-      return res.status(200).json(create)
-    
+        unidadeMedida,
+        secretaria: r[0]._id
+      }).then(r => res.status(200).json(r))
+      .catch(e => res.status(400).json({error: 'Erro ao cadastrar os produtos'}))
+    ).catch(() => res.status(400).json({error: 'ID secretaria não encontrado'}))
   }
 
  async update(req, res){

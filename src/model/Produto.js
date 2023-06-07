@@ -8,6 +8,10 @@ const ProdutoSchema = new Schema({
   tempLicitacao: {
     type: Schema.Types.ObjectId,
     ref: 'TempLicitacao'
+  },
+  secretaria: {
+    type: Schema.Types.ObjectId,
+    ref: 'Secretaria'
   }
 })
 

@@ -36,7 +36,7 @@ class SecretariaController{
       {
         secretaria: {'$eq': _id}
       }
-    )
+    ).populate('secretaria')
 
     if(_idSecretaria){
       return res.status(200).json(_idSecretaria)

@@ -18,7 +18,11 @@ class ProdutoController{
       return res.status(400).json({error: 'Algum campo está inválido.'})
     }
 
-    const produtoExist = await Produto.find({nome: {'$eq': nome}})
+    const produtoExist = await Produto.find(
+      {
+        nome: {'$eq': nome}, 
+        secretaria: {'$eq': secretaria}
+      })
 
     if(produtoExist != false){
       return res.status(400).json({error: 'Produto já existente na licitação.'})
@@ -87,7 +91,7 @@ class ProdutoController{
   const {_id} = req.params
 
   await Produto.find({
-    _id:{'$eq': _id}
+    secretaria:{'$eq': _id}
   }).then(r => res.status(200).json(r))
       .catch(e => res.status(400).json({error: 'ID não correspondido.'}))
  }

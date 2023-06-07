@@ -1,4 +1,5 @@
 const Produto = require('../model/Produto')
+const Secretaria = require('../model/Secretaria')
 const Solicitacao = require('../model/Solicitado')
 const User =  require('../model/User')
 const Yup = require('yup')
@@ -11,17 +12,18 @@ class SolicitacaoController{
       unidadeMedida: Yup.string().required(),
       merendeira: Yup.string().required(),
       horario: Yup.string().required(),
-      produto: Yup.string().required()
+      produto: Yup.string().required(),
+      secretaria: Yup.string().required()
     })
 
-    const { nome, quantidadeProduto, unidadeMedida, merendeira, horario, produto } = req.body
+    const { nome, quantidadeProduto, unidadeMedida, merendeira, horario, produto, secretaria } = req.body
     
     if(!(await schema.isValid(req.body))){
       return res.status(400).json({error:'Falha na validação dos campos.'})
     }
 
-    let produtoID = 0
-
+    let produtoID  = 0 
+    
     await Produto.find(
       {
         nome: {'$eq': nome},
@@ -29,7 +31,35 @@ class SolicitacaoController{
         _id: {'$eq': produto}
       }
     ).then((r => produtoID = r[0]._id))
-    .catch((e) => produtoID = 0)
+    .catch(() => produtoID = false)
+
+
+    if(!produtoID){
+      return res.status(400).json({error: 'Erro ao encontrar o produto.'})
+    }
+
+    let secretariaID 
+    
+    await Secretaria.find({
+      _id:{'$eq': secretaria}
+    }).then(r => secretariaID = r[0]._id)
+    .catch(() => produtoID = false)
+
+     if(!secretariaID){
+      return res.status(400).json({error: 'Erro ao encontrar a secretaria.'})
+    }
+
+    let merendeiraSecretaria
+    
+    await User.find({
+      _id: {'$eq': merendeira},
+      secretaria: {'$eq': secretariaID}
+    }).then(r => merendeiraSecretaria = r[0]._id)
+    .catch(() => merendeiraSecretaria = false)
+
+    if(!merendeiraSecretaria){
+      return res.status(400).json({error: 'Erro ao encontrar a merendeira.'})
+    }
 
     try{
       await Solicitacao.create({
@@ -37,10 +67,11 @@ class SolicitacaoController{
         quantidadeProduto,
         unidadeMedida,
         horario,
-        merendeira, 
-        produto: produtoID
+        merendeira: merendeiraSecretaria, 
+        produto: produtoID,
+        secretaria: secretariaID
       }).then(r => res.status(200).json(r))
-      .catch(() => res.status(400).json({msgError: 'Produto não existente no almoxarifado ou quantia solicitada maior que a quantidade de produto no almoxarifado'}))  
+      .catch((e) => res.status(400).json({msgError: e}))  
     }catch(e){
       res.status(400).json(e)
     }    
@@ -54,7 +85,7 @@ class SolicitacaoController{
   }
 
   async index(req, res){
-    await Solicitacao.find().populate('merendeira').populate('produto')
+    await Solicitacao.find().populate('merendeira').populate('produto').populate('secretaria')
       .then(r => res.status(200).json(r))
         .catch(err => res.status(400).json({error: err}))
   }
@@ -128,7 +159,7 @@ class SolicitacaoController{
 
     await Solicitacao.find(
       {merendeira:{'$eq':_id}, rt: {'$eq': true}, solicitado:{'$eq':true}}
-      ).populate('merendeira')
+      ).populate('merendeira').populate('secretaria')
       .then(r =>  res.status(200).json(r))
         .catch(() => res.status(404).json({error: 'Não foi encontrada essa solicitação.'}))
   }

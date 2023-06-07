@@ -16,6 +16,10 @@ const Solicitacao = new Schema({
   produto: {
     type:Schema.Types.ObjectId,
     ref: 'Produto'
+  },
+  secretaria: {
+    type: Schema.Types.ObjectId,
+    ref: 'Secretaria'
   }
 })
 

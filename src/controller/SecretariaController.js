@@ -21,6 +21,12 @@ class SecretariaController{
 
     return res.status(200).json(create)
   }
+
+  async index(req, res){
+    await Secretaria.find()
+      .then(r => res.status(200).json(r))
+        .catch(e => res.status(400).json(e))
+  }
 }
 
 module.exports = new SecretariaController()

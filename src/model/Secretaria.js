@@ -1,9 +1,9 @@
 const mongoose = require('../config/database')
 const Schema = mongoose.Schema
 
-const Secretaria = new Schema({
+const SecretariaSchema = new Schema({
   estado: String,
   municipio: String,
 })
 
-module.exports = mongoose.model('Secretaria', Secretaria)
+module.exports = mongoose.model('Secretaria', SecretariaSchema)

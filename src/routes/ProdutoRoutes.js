@@ -9,7 +9,7 @@ produtoRoutes.put('/produto/:_id', ProdutoController.update)
 produtoRoutes.put('/mr/update/:_id', ProdutoController.updateQuantiaProduto)
 
 produtoRoutes.get('/produtos', ProdutoController.getProdutos)
-produtoRoutes.get('/produtos/:_id', ProdutoController.index)
+produtoRoutes.get('/secretaria/produtos/:_id', ProdutoController.index)
 
 produtoRoutes.delete('/produtos/deletar/:_id', ProdutoController.destroy)
 

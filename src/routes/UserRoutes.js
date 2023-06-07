@@ -10,4 +10,7 @@ userRoutes.get('/usuarios', UserController.index)
 userRoutes.post('/usuario', UserController.store)
 userRoutes.post('/usuario/login', UserController.login)
 
+userRoutes.put('/usuario/:_id', UserController.update)
+
+
 module.exports = userRoutes

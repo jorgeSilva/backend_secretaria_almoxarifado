@@ -112,9 +112,34 @@ class UserController{
   } 
 
   async index(req, res){
-    const allCamp = await User.find()
+    const allCamp = await User.find().populate('secretaria')
 
     return res.status(200).json(allCamp)
+  }
+
+  async update(req, res){
+    const schema = Yup.object().shape({
+      secretaria: Yup.string().required()
+    })
+
+    const { _id } = req.params
+    const { secretaria } = req.body
+
+     if(!(await schema.isValid(req.body))){
+      return res.status(400).json({error: 'Algum campo está inválido.'})
+    }
+
+    await User.findByIdAndUpdate(
+      {
+        '_id':_id
+      },
+      req.body,
+      {
+        new: true
+      }
+    )
+    .then(r => res.status(200).json(r))
+      .catch(() => res.status(400).json({error: 'ID não correspondido.'}))
   }
 }
 

@@ -9,6 +9,10 @@ const UserSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Escola'
   },
+  secretaria: {
+    type: Schema.Types.ObjectId,
+    ref: 'Secretaria'
+  }
 })
 
 module.exports = mongoose.model('Usuario', UserSchema)

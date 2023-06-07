@@ -43,58 +43,58 @@ class ProdutoController{
     ).catch(() => res.status(400).json({error: 'ID secretaria não encontrado'}))
   }
 
- async update(req, res){
-  const schema = Yup.object().shape({
-    nome: Yup.string().required(),
-    quantidadeProduto: Yup.number().required(),
-    unidadeMedida: Yup.string().required()
-  })
+  async update(req, res){
+    const schema = Yup.object().shape({
+      nome: Yup.string().required(),
+      quantidadeProduto: Yup.number().required(),
+      unidadeMedida: Yup.string().required()
+    })
 
-  const { nome, quantidadeProduto, unidadeMedida } = req.body
-  const { _id } = req.params
+    const { nome, quantidadeProduto, unidadeMedida } = req.body
+    const { _id } = req.params
 
-  if(!(await schema.isValid(req.body))){
-    return res.status(400).json({error: 'Algum campo está inválido.'})
+    if(!(await schema.isValid(req.body))){
+      return res.status(400).json({error: 'Algum campo está inválido.'})
+    }
+
+    await Produto.findByIdAndUpdate(
+      {'_id':_id}, req.body, {new: true}
+    ).then(response => res.status(200).json(response)).catch(() => res.status(400).json({error: 'ID não correspondido.'}))
+  } 
+
+  async updateQuantiaProduto(req, res){
+    const schema = Yup.object().shape({
+      quantidadeProduto: Yup.number().required()
+    })
+
+    const {quantidadeProduto} = req.body
+    const {_id} = req.params
+
+    if(!(await schema.isValid(req.body))){
+      return res.status(400).json({error: 'Algum campo está inválido.'})
+    }
+
+    await Produto.findByIdAndUpdate(
+      {'_id':_id}, req.body, {new: true}
+    ).then(response => res.status(200).json(response))
+      .catch(() => res.status(400).json({error: 'ID não correspondido.'}))
+
   }
 
-  await Produto.findByIdAndUpdate(
-    {'_id':_id}, req.body, {new: true}
-  ).then(response => res.status(200).json(response)).catch(() => res.status(400).json({error: 'ID não correspondido.'}))
- } 
+  async getProdutos(req, res){
+    const allProdutos =  await Produto.find()
 
- async updateQuantiaProduto(req, res){
-  const schema = Yup.object().shape({
-    quantidadeProduto: Yup.number().required()
-  })
-
-  const {quantidadeProduto} = req.body
-  const {_id} = req.params
-
-  if(!(await schema.isValid(req.body))){
-    return res.status(400).json({error: 'Algum campo está inválido.'})
+    return res.status(200).json(allProdutos)
   }
 
-  await Produto.findByIdAndUpdate(
-    {'_id':_id}, req.body, {new: true}
-  ).then(response => res.status(200).json(response))
-    .catch(() => res.status(400).json({error: 'ID não correspondido.'}))
+  async index(req, res){
+    const {_id} = req.params
 
- }
-
- async getProdutos(req, res){
-  const allProdutos =  await Produto.find()
-
-  return res.status(200).json(allProdutos)
- }
-
- async index(req, res){
-  const {_id} = req.params
-
-  await Produto.find({
-    secretaria:{'$eq': _id}
-  }).then(r => res.status(200).json(r))
-      .catch(e => res.status(400).json({error: 'ID não correspondido.'}))
- }
+    await Produto.find({
+      secretaria:{'$eq': _id}
+    }).then(r => res.status(200).json(r))
+        .catch(e => res.status(400).json({error: 'ID não correspondido.'}))
+  }
 
   async destroy(req, res){
     await Produto.deleteOne({'_id': req.params._id})

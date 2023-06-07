@@ -55,6 +55,31 @@ class EscolaController{
       .then(r => res.status(200).json(r))
         .catch(e => res.status(400).json(e))
   }
+
+  async update(req, res){
+    const schema = Yup.object().shape({
+      secretaria: Yup.string().required()
+    })
+
+    const { _id } = req.params
+    const { secretaria } = req.body
+
+
+    if(!(await schema.isValid(req.body))){
+      return res.status(400).json({error: 'Algum campo está inválido.'})
+    }
+
+    await Escola.findByIdAndUpdate(
+      {
+        '_id':_id
+      },
+      req.body,
+      {
+        new: true
+      }
+    ).then(r => res.status(200).json(r))
+      .catch(() => res.status(400).json({error: 'ID não correspondido.'}))
+  }
 }
 
 module.exports = new EscolaController()

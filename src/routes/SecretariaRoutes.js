@@ -5,6 +5,6 @@ const SecretariaController = require('../controller/SecretariaController')
 
 secretariaRoutes.post('/secretaria', SecretariaController.store)
 
-secretariaRoutes.get('/secretaria', SecretariaController.index)
+secretariaRoutes.get('/secretaria', SecretariaController.show)
 
 module.exports = secretariaRoutes

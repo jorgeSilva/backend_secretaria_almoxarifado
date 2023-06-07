@@ -17,14 +17,11 @@ class EscolaController{
       res.status(400).json({error: 'Algum campo não foi preenchido.'})
     }
 
-    let secretariaExist
-    
-    await Secretaria.find(
+    let secretariaExist = await Secretaria.find(
       {
         _id: {'$eq': secretaria}
       }
-    ).then(r => secretariaExist = r._id)
-      .catch(e => res.status(400).json({error: 'Secretaria não encontrada'}))
+    )
 
     let escola = await Escola.find(
       {
@@ -37,7 +34,7 @@ class EscolaController{
         nome,
         tipoEnsino,
         nAlunos,
-        secretaria: secretariaExist
+        secretaria: secretariaExist[0]._id
       }).then(r => res.status(200).json(r))
           .catch(e => res.status(400).json(e))
     }else{
@@ -54,7 +51,7 @@ class EscolaController{
   }
 
   async show(req, res){
-    await Escola.find()
+    await Escola.find().populate('secretaria')
       .then(r => res.status(200).json(r))
         .catch(e => res.status(400).json(e))
   }

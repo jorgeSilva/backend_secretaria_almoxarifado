@@ -91,7 +91,14 @@ class SolicitacaoController{
   }
 
    async rtFalse(req, res){
-    await Solicitacao.find({rt: {'$eq':false}}).populate('merendeira')
+
+    const { _id } = req.params
+    
+    await Solicitacao.find(
+      {
+        rt: {'$eq':false},
+        secretaria: {'$eq': _id}
+      }).populate('merendeira')
       .then(r => res.status(200).json(r))
         .catch(err => res.status(400).json({error: err}))
   }

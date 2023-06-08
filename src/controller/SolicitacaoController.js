@@ -23,12 +23,24 @@ class SolicitacaoController{
     }
 
     let produtoID  = 0 
+    let secretariaID 
+    let merendeiraSecretaria
+
+    await Secretaria.find({
+      _id:{'$eq': secretaria}
+    }).then(r => secretariaID = r[0]._id)
+    .catch(() => produtoID = false)
+
+     if(!secretariaID){
+      return res.status(400).json({error: 'Erro ao encontrar a secretaria.'})
+    }
     
     await Produto.find(
       {
         nome: {'$eq': nome},
         quantidadeProduto: {'$gte': quantidadeProduto}, 
-        _id: {'$eq': produto}
+        _id: {'$eq': produto},
+        secretaria: {'$eq': secretariaID}
       }
     ).then((r => produtoID = r[0]._id))
     .catch(() => produtoID = false)
@@ -38,19 +50,6 @@ class SolicitacaoController{
       return res.status(400).json({error: 'Erro ao encontrar o produto.'})
     }
 
-    let secretariaID 
-    
-    await Secretaria.find({
-      _id:{'$eq': secretaria}
-    }).then(r => secretariaID = r[0]._id)
-    .catch(() => produtoID = false)
-
-     if(!secretariaID){
-      return res.status(400).json({error: 'Erro ao encontrar a secretaria.'})
-    }
-
-    let merendeiraSecretaria
-    
     await User.find({
       _id: {'$eq': merendeira},
       secretaria: {'$eq': secretariaID}

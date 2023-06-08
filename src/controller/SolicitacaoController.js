@@ -85,22 +85,28 @@ class SolicitacaoController{
   }
 
   async index(req, res){
-    await Solicitacao.find().populate('merendeira').populate('produto').populate('secretaria')
+    const { _id } = req.params
+
+    await Solicitacao.find(
+      {
+        secretaria:{'$eq': _id}
+      }
+    ).populate('merendeira').populate('produto').populate('secretaria')
       .then(r => res.status(200).json(r))
         .catch(err => res.status(400).json({error: err}))
   }
 
-   async rtFalse(req, res){
+  async rtFalse(req, res){
 
     const { _id } = req.params
     
     await Solicitacao.find(
-      {
-        rt: {'$eq':false},
-        secretaria: {'$eq': _id}
-      }).populate('merendeira')
-      .then(r => res.status(200).json(r))
-        .catch(err => res.status(400).json({error: err}))
+    {
+      rt: {'$eq':false},
+      secretaria: {'$eq': _id}
+    }).populate('merendeira')
+    .then(r => res.status(200).json(r))
+      .catch(err => res.status(400).json({error: err}))
   }
   
   async rtApproved(req, res){

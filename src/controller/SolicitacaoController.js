@@ -160,9 +160,15 @@ class SolicitacaoController{
   }
 
   async aindaNaoAprovado(req, res){
+    const { _id } = req.params
+
     await Solicitacao.find(
-      {rt: {'$eq': true}, solicitado:{'$eq':false}}
-      ).populate('merendeira')
+      {
+        rt: {'$eq': true}, 
+        solicitado:{'$eq':false},
+        secretaria: {'$eq': _id}
+      }
+      ).populate('merendeira').populate('secretaria')
       .then(r =>  res.status(200).json(r))
         .catch(() => res.status(404).json({error: 'Não foi encontrada essa solicitação.'}))
   }

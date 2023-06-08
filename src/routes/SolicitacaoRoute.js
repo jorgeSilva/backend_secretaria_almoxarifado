@@ -7,7 +7,7 @@ solicitacaoRoutes.post('/mr', SolicitacaoController.store)
 
 solicitacaoRoutes.get('/rt/:_id', SolicitacaoController.show)
 solicitacaoRoutes.get('/rt/secretaria/:_id', SolicitacaoController.index)
-solicitacaoRoutes.get('/gl', SolicitacaoController.aindaNaoAprovado)
+solicitacaoRoutes.get('/gl/secretaria/:_id', SolicitacaoController.aindaNaoAprovado)
 solicitacaoRoutes.get('/rtFalse/:_id', SolicitacaoController.rtFalse)
 solicitacaoRoutes.get('/rt/gl/aprovados/:_id', SolicitacaoController.aprovados)
 

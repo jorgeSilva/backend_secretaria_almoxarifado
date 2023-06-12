@@ -197,11 +197,11 @@ class SolicitacaoController{
       .catch(err => res.status(400).json({error: err}))
   }
 
- /*  async delete(req, res){
-    await Solicitacao.find().populate('merendeira')
-      .then(r => res.status(200).json(r))
-        .catch(err => res.status(400).json({error: err}))
-  } */
+  async destroy(req, res){
+    await Solicitacao.deleteOne({'_id': req.params._id})
+      .then(() => res.status(200).json({msg:'Deletado com sucesso.'}))
+        .catch(() => res.status(400).json({error: 'Não foi encontrado o produto informado'}))
+  }
 }
 
 module.exports = new SolicitacaoController()

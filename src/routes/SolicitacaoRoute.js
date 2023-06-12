@@ -17,4 +17,6 @@ solicitacaoRoutes.put('/gl/:_id/:solicitado', SolicitacaoController.solicitado)
 solicitacaoRoutes.put('/rt/:_id/:approved', SolicitacaoController.rtApproved)
 solicitacaoRoutes.put('/mr/:_id/:entregue', SolicitacaoController.entregue)
 
+solicitacaoRoutes.delete('/produto/solicitado/:_id', SolicitacaoController.destroy)
+
 module.exports = solicitacaoRoutes

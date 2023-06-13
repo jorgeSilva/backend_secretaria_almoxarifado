@@ -13,6 +13,7 @@ solicitacaoRoutes.get('/rt/gl/aprovados/:_id', SolicitacaoController.aprovados)
 
 
 solicitacaoRoutes.put('/mr/gl/:_id', SolicitacaoController.update)
+solicitacaoRoutes.put('/rt/gl/produto/quantidade/:_id', SolicitacaoController.updateQuantidade)
 solicitacaoRoutes.put('/gl/:_id/:solicitado', SolicitacaoController.solicitado)
 solicitacaoRoutes.put('/rt/:_id/:approved', SolicitacaoController.rtApproved)
 solicitacaoRoutes.put('/mr/:_id/:entregue', SolicitacaoController.entregue)

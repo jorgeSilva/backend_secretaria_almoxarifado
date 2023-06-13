@@ -143,6 +143,24 @@ class SolicitacaoController{
     ).then(response => res.status(200).json(response)).catch(() => res.status(400).json({error: 'ID não correspondido.'}))
   }
 
+  async updateQuantidade(req, res){
+    const schema = Yup.object().shape({
+      quantidadeProduto: Yup.number().required(),
+      unidadeMedida: Yup.string().required()
+    })
+  
+    const { quantidadeProduto } = req.body
+    const { _id } = req.params
+
+    if(!(await schema.isValid(req.body))){
+      return res.status(400).json({error: 'Algum campo está inválido.'})
+    }
+
+    await Solicitacao.findByIdAndUpdate(
+      {'_id':_id}, req.body, {new: true}
+    ).then(response => res.status(200).json(response)).catch(() => res.status(400).json({error: 'ID não correspondido.'}))
+  }
+
   async solicitado(req, res){
     await Solicitacao.findByIdAndUpdate(
       {

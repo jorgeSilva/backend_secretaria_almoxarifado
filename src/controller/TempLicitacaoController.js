@@ -59,6 +59,25 @@ class TempLicitacaoController{
     }).then(r => res.status(200).json(r))
         .catch(() => res.status(400).json({error: 'Não foi encontrado os produtos da licitação'}))
   }
+
+  async updateLicitado(req, res){
+    const schema = Yup.object().shape({
+      quantidadeProduto: Yup.number().required()
+    })
+
+    const {quantidadeProduto} = req.body
+    const {_id} = req.params
+
+    if(!(await schema.isValid(req.body))){
+      return res.status(400).json({error: 'Algum campo está inválido.'})
+    }
+
+    await TempLicitacao.findByIdAndUpdate(
+      {'_id':_id}, req.body, {new: true}
+    ).then(response => res.status(200).json(response))
+      .catch(() => res.status(400).json({error: 'ID não correspondido.'}))
+
+  }
 }
 
 module.exports = new TempLicitacaoController()

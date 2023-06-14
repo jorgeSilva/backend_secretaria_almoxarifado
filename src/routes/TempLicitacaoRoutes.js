@@ -10,4 +10,7 @@ TempLicRoutes.put('/licitacao/produto/:_id', TempLicitacaoController.updateLicit
 TempLicRoutes.get('/licitacao/produtos', TempLicitacaoController.index)
 TempLicRoutes.get('/licitacao/produtos/:_id', TempLicitacaoController.getLicitacaoSecretaria)
 
+TempLicRoutes.delete('/licitacao/produtos/:_id', TempLicitacaoController.destroy)
+
+
 module.exports = TempLicRoutes

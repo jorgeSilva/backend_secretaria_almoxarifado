@@ -79,6 +79,47 @@ class TempLicitacaoController{
 
   }
 
+  async updateLicitadoENV(req, res){
+    const schema = Yup.object().shape({
+      quantidadeProdutoENV: Yup.number().required()
+    })
+
+    const {quantidadeProdutoENV} = req.body
+    const {_id} = req.params
+
+    if(!(await schema.isValid(req.body))){
+      return res.status(400).json({error: 'Algum campo está inválido.'})
+    }
+
+    await TempLicitacao.findByIdAndUpdate(
+      {'_id':_id}, req.body, {new: true}
+    ).then(response => res.status(200).json(response))
+      .catch(() => res.status(400).json({error: 'ID não correspondido.'}))
+
+  }
+
+  async update(req, res){
+    const schema = Yup.object().shape({
+      nome: Yup.string().required(),
+      quantidadeProduto:Yup.number().required(),
+      unidadeMedida: Yup.string().required(),
+      quantidadeProdutoENV: Yup.number().required()
+    })
+
+    const {nome, quantidadeProduto, unidadeMedida, quantidadeProdutoENV} = req.body
+    const {_id} = req.params
+
+    if(!(await schema.isValid(req.body))){
+      return res.status(400).json({error: 'Algum campo está inválido.'})
+    }
+
+    await TempLicitacao.findByIdAndUpdate(
+      {'_id':_id}, req.body, {new: true}
+    ).then(response => res.status(200).json(response))
+      .catch(() => res.status(400).json({error: 'ID não correspondido.'}))
+
+  }
+
   async destroy(req, res){
     await TempLicitacao.deleteOne({'_id': req.params._id})
       .then(() => res.status(200).json({msg:'Deletado com sucesso.'}))

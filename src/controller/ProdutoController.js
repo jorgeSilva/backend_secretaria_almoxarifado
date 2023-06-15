@@ -23,13 +23,6 @@ class ProdutoController{
     let licitadoID
     let secretariaID
     let secretariaQTDP
-
-    const produtoExist =  await Produto.find(
-      {
-        nome: {'$eq': nome}, 
-        secretaria: {'$eq': secretaria}
-      }
-    )
       
     await Secretaria.find(
       {
@@ -60,6 +53,16 @@ class ProdutoController{
 
     if(!secretariaQTDP){
       return res.status(400).json({error: 'Quantidade de pedidos maior que a quantidade existente na Licitação.'})
+    }
+
+    const produtoExist = await Produto.find(
+      {
+        nome: {'$eq': nome}, 
+        secretaria: {'$eq': secretaria}
+      })
+
+    if(produtoExist != false){
+      return res.status(400).json({error: 'Produto já existente no almoxarifado.'})
     }
 
     try{

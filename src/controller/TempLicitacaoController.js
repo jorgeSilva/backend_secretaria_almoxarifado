@@ -19,7 +19,7 @@ class TempLicitacaoController{
       return res.status(400).json({error: 'Algum campo está inválido.'})
     }
 
-    const produtoExist = await Produto.find(
+    const produtoExist = await TempLicitacao.find(
       {
         nome: {'$eq': nome}, 
         secretaria: {'$eq': secretaria}

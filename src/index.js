@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const server = express()
+require('dotenv').config()
 
 server.use(cors())
 server.use(express.json())
@@ -19,6 +20,8 @@ server.use(userRoutes)
 server.use(solicitacaoRoutes)
 server.use(secretariaRoutes)
 
-server.listen(3333, () => {
+const PORT = process.env.PORT
+
+server.listen(PORT, () => {
   console.log('Funcionando');
 })

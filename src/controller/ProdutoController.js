@@ -124,7 +124,6 @@ class ProdutoController{
 
   async getProdutos(req, res){
     const allProdutos =  await Produto.find()
-
     return res.status(200).json(allProdutos)
   }
 
